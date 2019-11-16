@@ -4,7 +4,7 @@
 vlib work
 
 
-vlog ${1}.v +incdir+../testbench +incdir+../simulation  +incdir+../testbench
+vlog ${1}.v +incdir+../testbench +incdir+../simulation  +incdir+../testbench -timescale 1ns/1ns
 
       vlog ../rtl/top.v +incdir+../simulation +incdir+../rtl/bus_matrix/ +incdir+../testbench
       vlog ../rtl/cpu/cpu_top.v
@@ -48,7 +48,7 @@ vlog ${1}.v +incdir+../testbench +incdir+../simulation  +incdir+../testbench
       vlog ../testbench/uart_tasks.v  +incdir+../simulation  +incdir+../testbench
 
 
-vsim -voptargs=+acc work.testbench  +define+RTL +define+SIM
+vsim -voptargs=+acc work.testbench  +define+RTL +define+SIM 
 
 do wave.do
 run -all

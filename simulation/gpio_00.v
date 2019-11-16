@@ -8,7 +8,10 @@
 // Update Count    : 0
 // Status          : Unknown, Use with caution!
 
+
 module test_case (/*AUTOARG*/ ) ;
+`include "platform_includes.vh"
+
    //
    // Test Configuration
    // These parameters need to be set for each test case
@@ -26,8 +29,8 @@ module test_case (/*AUTOARG*/ ) ;
    initial begin
       daq_read = 0;
 
-      @(negedge `WB_RST);
       `TEST_COMPARE("GPIO 00 TEST CASE",0,0);
+      @(negedge `WB_RST);
       @(posedge `TB.UART_VALID);
       `CPU_WRITES(`WB_GPIO_R_OUT,   4'hF, 32'h0000_0000);
 

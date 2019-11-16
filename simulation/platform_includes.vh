@@ -13,7 +13,7 @@
 `define WB_RST      `TB.wb_rst
 `define WB_CLK      `TB.wb_clk
 `define DUT         `TB.dut
-`define SYSCON      `DUT.syscon0
+`define SYSCON      `DUT.syscon
 `define PLATFORM_TASKS   `TB.platform_tasks
 
 `define UART_MASTER0      `TB.uart_master0
@@ -36,7 +36,7 @@
 `define CPU_WRITE   `TB.cpu_write
 `define CPU_DATA_WR `TB.cpu_data_wr
 `define CPU_DATA_RD `TB.cpu_data_rd
-`define CPU_ACTIVE  `TB.cpu_active
+`define CPU_ACTIVE  `TB.cpu_actives
 
 `define RAM0        `TB.ram0
 `define RAM00       `RAM.ram0

@@ -1,0 +1,47 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  -i "../simulation" -i "../testbench" -i "../behavioral/wb_intercon" -i "../behavioral" -i "../behavioral/wb_common" -i "../rtl/bus_matrix" -i "../behavioral/wb_uart" --include "../simulation" --include "../rtl/gpio" --include "../behavioral" --include "../behavioral/wb_common" --include "../rtl/bus_matrix" --include "../testbench" --include "../behavioral/wb_uart" --include "../behavioral/wb_master" --include "../../../../basys3_digilent.srcs/sources_1/ip/clk_wiz_0" \
+"../backend/basys3/ip/clk_wiz_0/clk_wiz_0_clk_wiz.v" \
+"../backend/basys3/ip/clk_wiz_0/clk_wiz_0.v" \
+"../rtl/wb_master_interface/arbiter.v" \
+"../rtl/bus_matrix/bus_matrix.v" \
+"../rtl/cpu/cpu_top.v" \
+"../testbench/platform_tasks.v" \
+"../rtl/gpio/gpio_top.v" \
+"../rtl/pc_interface/packet_decode.v" \
+"../rtl/pc_interface/pc_interface.v" \
+"../behavioral/wb_uart/raminfr.v" \
+"../rtl/syscon/syscon_top.v" \
+"../rtl/syscon/syscon_regs.v" \
+"../rtl/syscon/syscon.v" \
+"../testbench/test_tasks.v" \
+"../rtl/top.v" \
+"../rtl/uart/uart.v" \
+"../behavioral/wb_uart/uart_debug_if.v" \
+"../behavioral/wb_uart/uart_receiver.v" \
+"../behavioral/wb_uart/uart_regs.v" \
+"../behavioral/wb_uart/uart_rfifo.v" \
+"../behavioral/wb_uart/uart_sync_flops.v" \
+"../testbench/uart_tasks.v" \
+"../behavioral/wb_uart/uart_tfifo.v" \
+"../behavioral/wb_uart/uart_top.v" \
+"../behavioral/wb_uart/uart_transmitter.v" \
+"../behavioral/wb_uart/uart_wb.v" \
+"../behavioral/wb_intercon/wb_arbiter.v" \
+"../behavioral/wb_master/wb_mast_model.v" \
+"../rtl/wb_master_interface/wb_master_interface.v" \
+"../behavioral/wb_intercon/wb_mux.v" \
+"../behavioral/wb_ram/wb_ram.v" \
+"../behavioral/wb_ram/wb_ram_generic.v" \
+"../testbench/testbench.v" \
+
+# compile glbl module
+verilog xil_defaultlib "$XILINX_VIVADO/data/verilog/src/glbl.v"
+verilog xil_defaultlib "$XILINX_VIVADO/data/verilog/src/unisims/IBUF.v"
+verilog xil_defaultlib "$XILINX_VIVADO/data/verilog/src/unisims/BUFG.v"
+verilog xil_defaultlib "$XILINX_VIVADO/data/verilog/src/unisims/MMCME2_ADV.v"
+verilog xil_defaultlib "$XILINX_VIVADO/data/verilog/src/unisims/MMCME2_BASE.v"
+
+
+
+# Do not sort compile order
+nosort

@@ -8,15 +8,16 @@
 // Update Count    : 0
 // Status          : Unknown, Use with caution!
 
-`include "dsp_includes.vh"
 
 module test_case (/*AUTOARG*/ ) ;
+`include "platform_includes.vh"
+   
    //
    // Test Configuration
    // These parameters need to be set for each test case
    //
    parameter simulation_name = "syscon_regs00";
-   parameter number_of_tests = 4;
+   parameter number_of_tests = 3;
 
    reg [31:0] cpu_read;
    reg [31:0] identification;
@@ -37,7 +38,6 @@ module test_case (/*AUTOARG*/ ) ;
       identification[`F_IDENTIFICATION_PLATFORM]  = `B_IDENTIFICATION_FPGA;
       identification[`F_IDENTIFICATION_MINOR_REV] = `B_IDENTIFICATION_MINOR_REV;
       identification[`F_IDENTIFICATION_MAJOR_REV] = `B_IDENTIFICATION_MAJOR_REV;
-      `CPU_READS(`WB_SYSCON_R_IDENTIFICATION, 4'hF,  identification);
 
       `CPU_READS(`WB_SYSCON_R_STATUS, 4'hF,  32'h0000_0001, cpu_read);
 

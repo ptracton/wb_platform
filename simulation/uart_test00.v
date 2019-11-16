@@ -16,7 +16,7 @@ module test_case (/*AUTOARG*/ ) ;
    // These parameters need to be set for each test case
    //
    parameter simulation_name = "uart_test00";
-   parameter number_of_tests = 7;
+   parameter number_of_tests = 5;
    reg [31:0] uart_read;
 
    initial begin
@@ -54,31 +54,6 @@ module test_case (/*AUTOARG*/ ) ;
 
       repeat (6000) @(posedge `WB_CLK);
 
-      //
-      // Configure File 1
-      //
-      `CPU_WRITE_FILE_CONFIG(1, `WB_RAM1,       `WB_RAM1+(4*6), `WB_RAM1, `WB_RAM1, `B_CONTROL_DATA_SIZE_WORD);
-
-      // `UART_WRITE_BYTE(`PKT_PREAMBLE);                     // Preamble
-      // `UART_WRITE_BYTE(8'hF0 | `PKT_COMMAND_DAQ_WRITE);    // Size and Command
-      // `UART_WRITE_BYTE(8'h1);                              // Length
-      // `UART_WRITE_BYTE(8'h1);                              // File Number
-      // `UART_WRITE_WORD(32'hABCD_1234);                     // Write Data
-
-      `DAQ_WRITES_FILE(1, 32'hABCD_1234);
-      `DAQ_WRITES_FILE(1, 32'hA5678_DEAD);
-
-
-      `UART_WRITE_BYTE(`PKT_PREAMBLE);                     // Preamble
-      `UART_WRITE_BYTE(8'hF0 | `PKT_COMMAND_CPU_READ);     // Size and Command
-      `UART_WRITE_BYTE(8'h2);                              // Length
-      `UART_WRITE_WORD(`WB_RAM1);                          // Start Address
-      `UART_READ_WORD(32'hABCD_1234, uart_read);
-      `TEST_COMPARE("DAQ Written Read 0", 32'hABCD_1234, uart_read);
-      `UART_READ_WORD(32'h5678_DEAD, uart_read);
-      `TEST_COMPARE("DAQ Written Read 1", 32'h5678_DEAD, uart_read);
-
-      repeat (6000) @(posedge `WB_CLK);
 
       `TEST_COMPARE("TEST COMPLETE", 0,0);
       `TEST_COMPLETE;

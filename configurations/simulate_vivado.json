@@ -23,7 +23,7 @@
 	      },
         "test_case" : {
             "executable" : "xvlog ",
-            "arguments" : " dsp_includes.vh $simulation -i ../simulation --work xil_defaultlib"
+            "arguments" : " platform_includes.vh $simulation -i ../simulation --work xil_defaultlib"
         },
 	    "elaborate" : {
 	        "executable": "xelab",
