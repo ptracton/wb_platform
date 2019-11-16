@@ -1,0 +1,24 @@
+{
+    "project":"simulate_isim",
+    "installed tools": [
+        "xilinx",
+        "altera",
+        "icarus"
+    ],
+    "flow_steps": {
+        "1" : "clean",
+        "2" : "simulation"
+    },
+    "flow" : {
+	    "clean" :{
+	        "executable" : "rm",
+	        "arguments" : "-rf xsim.dir xvlog* xelab.pb webtalk* xsim.dir/ xvlog.pb *.wdb"
+	    },
+
+	    "simulation" : {
+	        "executable": "xrun",
+	        "arguments" : " -64bit +access+rwc -f rtl_sim.f $simulation +define+XRUN +define+NCVERILOG -l $simulation.$tool.log"
+	    }
+    },
+    "remove_files" : "hack.vh webtalk* work.testbench.wdb xsim* xvlog* xelab* xcelium.d xrun* *log *history *.shm"
+}

@@ -1,0 +1,22 @@
+{
+    "project":"simulate_modelsim",
+    "installed tools": [
+        "xilinx",
+        "altera",
+        "icarus"
+    ],
+    "flow_steps": {
+        "1":"clean",
+	"2" : "sim"
+    },
+    "flow" : {
+        "clean":{
+            "executable":"rm",
+            "arguments":" -rf *~ modelsim_logfile.txt vsim.wlf work/ "
+        },
+	"sim" : {
+	    "executable": "vsim",
+            "arguments" : " -c -do rtl_modelsim.f -l modelsim_logfile.txt"
+	}
+    }
+}

@@ -102,3 +102,32 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+*~
+*.tex
+*.pdf
+*.aux
+*.dvi
+*.out
+*.toc
+*vhdl
+*dcp
+*veo
+*xml
+*vcd
+*zip
+*jou
+*str
+GPATH
+GRTAGS
+GTAGS
+.Xil/
+*.sim/
+*.hw/
+*.runs/
+*.ip_user_files/
+*.shm/
+*.history
+xcelium.d/
+xrun.key

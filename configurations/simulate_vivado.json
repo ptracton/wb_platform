@@ -1,0 +1,38 @@
+{
+    "project":"simulate_vivado",
+    "installed tools": [
+        "xilinx",
+        "altera",
+        "icarus"
+    ],
+    "flow_steps": {
+	    "1" : "clean",
+
+        "3" : "test_case",
+        "4" : "elaborate",
+        "5" : "simulation"
+    },
+    "flow" : {
+	      "clean" :{
+	          "executable" : "rm",
+	          "arguments" : "-rf  vivado* xsim.dir xelab* xvlog* webtalk.log *.wdb"
+	      },
+	      "verilog" :{
+	          "executable" : "xvlog ",
+              "arguments" : " --prj rtl_vivado.prj --log $simulation.vivado.xvlog.log"
+	      },
+        "test_case" : {
+            "executable" : "xvlog ",
+            "arguments" : " dsp_includes.vh $simulation -i ../simulation --work xil_defaultlib"
+        },
+	    "elaborate" : {
+	        "executable": "xelab",
+	        "arguments" : " -prj rtl_vivado.prj  -debug all  --timescale 1ns/1ns -L unisims_ver -L unimacro_ver -s $simulation.snapshot xil_defaultlib.testbench xil_defaultlib.glbl --log $simulation.xelab.log"
+	    },
+        "simulation" : {
+            "executable" : "xsim",
+            "arguments" : " $simulation.snapshot -t simulation.tcl --log $simulation.vivado.log"
+        }
+    },
+    "remove_files" : " vivado* xsim.dir xelab* xvlog* webtalk.log *.wdb"
+}

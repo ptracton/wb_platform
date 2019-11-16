@@ -1,0 +1,32 @@
+{
+    "project":"simulate_iverilog",
+    "installed tools": [
+        "xilinx",
+        "altera",
+        "icarus"
+    ],
+    "flow_steps": {
+    "1" : "clean_up",
+    "3" : "simulation",
+    "4" : "run"
+    },
+    "flow" : {
+        "clean_up" : {
+            "executable" : "rm",
+            "arguments" : "-f dump.vcd a.out hack.vh"
+        },
+        "ram_hack":{
+            "executable": "../tools/ram_image_hack.py ",
+            "arguments" : " --simulation $simulation"
+        },
+	      "simulation" : {
+	          "executable": "iverilog",
+	          "arguments" : " -f rtl_sim.f $simulation -DICARUS "
+	      },
+	      "run" : {
+	          "executable" : "vvp",
+	          "arguments"  : "  -l $simulation.$tool.log a.out"
+	      }
+    },
+    "remove_files": "hack.vh *.vcd a.out"
+}
