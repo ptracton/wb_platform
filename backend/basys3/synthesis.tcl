@@ -62,10 +62,10 @@ synth_ip [get_ips *]
 read_xdc basys3.xdc
 set_property used_in_implementation false [get_files basys3.xdc]
 
-synth_design -top top -part xc7a35tcpg236-3
+synth_design -top top -part xc7a35tcpg236-3 -flatten_hierarchy none
 write_checkpoint -noxdef -force synthesis/basys3.dcp
 catch { report_utilization -file synthesis/basys3_utilization_synth.rpt -pb synthesis/basys3_utilization_synth.pb }
 
 open_checkpoint synthesis/basys3.dcp
-write_verilog -mode funcsim -sdf_anno true synthesis/top_funcsim.v
-write_sdf synthesis/top_funcsim.sdf
+write_verilog -force -mode funcsim -sdf_anno true synthesis/top_funcsim.v
+write_sdf -force synthesis/top_funcsim.sdf
