@@ -14,13 +14,20 @@
 
 module uart_tasks;
 
+   reg uart_busy;
+   initial uart_busy = 0;
+
+
    // Configure WB UART in testbench
    // 115200, 8N1
    //
    task uart_config;
       begin
-
+`ifdef MODELSIM
+         $display("TASK: UART Configure");
+`else
          $display("\033[93mTASK: UART Configure\033[0m");
+`endif
 
          @(posedge `UART_CLK);
          //Turn on receive data interrupt
@@ -69,6 +76,8 @@ module uart_tasks;
    task uart_write_word;
       input [31:0] word;
       begin
+         uart_busy = 1;
+
 //         $display("UART WRITE WORD 0x%x @ %d", word, $time);
          uart_write_byte(word [07:00]);
          uart_write_byte(word [15:08]);
@@ -78,6 +87,7 @@ module uart_tasks;
          while (testbench.uart0.regs.lsr[6] == 1'b0) begin
             #100;
          end
+         uart_busy = 0;
       end
    endtask // uart_write_word
 
@@ -98,7 +108,11 @@ module uart_tasks;
       //$display("TASK: UART Read = 0x%x @ %d", testbench.read_word, $time);
       if (testbench.read_word !== expected)
         begin
+`ifdef MODELSIM
+           $display("FAIL: UART Read = 0x%h NOT 0x%h @ %d", testbench.read_word[7:0], expected, $time);
+`else
            $display("\033[1;31mFAIL: UART Read = 0x%h NOT 0x%h @ %d\033[0m", testbench.read_word[7:0], expected, $time);
+`endif
            `test_failed <= 1;
         end
          @(posedge testbench.clk_tb);

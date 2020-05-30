@@ -13,10 +13,11 @@
 module packet_decode (/*AUTOARG*/
    // Outputs
    leds, cpu_address, cpu_start, cpu_selection, cpu_write,
-   cpu_data_wr, transmit, tx_byte,
+   cpu_data_wr, transmit, tx_byte, file_num, file_write, file_read,
+   file_write_data,
    // Inputs
    clk, rst, rx_byte, received, recv_error, is_transmitting,
-   cpu_data_rd, cpu_active
+   cpu_data_rd, cpu_active, file_read_data, file_active
    ) ;
 
 
@@ -43,7 +44,14 @@ module packet_decode (/*AUTOARG*/
 
    input [dw-1:0]      cpu_data_rd;
    input               cpu_active;
-   
+
+   output reg [7:0]    file_num;
+   output reg          file_write;
+   output reg          file_read;
+   output reg [31:0]   file_write_data;
+   input [31:0]        file_read_data;
+   input               file_active;
+
    reg [7:0]           state;
 
    localparam STATE_IDLE                    = 8'h00;
@@ -56,6 +64,13 @@ module packet_decode (/*AUTOARG*/
    localparam STATE_CPU_READ_MEMORY_DONE    = 8'h07;
    localparam STATE_CPU_UPLOAD_MEMORY       = 8'h08;
    localparam STATE_CPU_UPLOAD_MEMORY_DONE  = 8'h09;
+   localparam STATE_DAQ_FILE_NUM            = 8'h0A;
+   localparam STATE_DAQ_FILE_WRITE_DATA     = 8'h0B;
+   localparam STATE_DAQ_FILE_WRITE          = 8'h0C;
+
+
+   //`define STATE_READ_START_ADDRESS_2 8'h05
+   //`define STATE_READ_START_ADDRESS_3 8'h06
 
    reg [3:0]           size;
    reg [3:0]           command;
@@ -65,10 +80,11 @@ module packet_decode (/*AUTOARG*/
    reg [7:0]           byte_count;
    reg [7:0]           samples_transferred;
 
-   
+
    wire                decode_cpu_command   = (command == `PKT_COMMAND_CPU_WRITE) | (command == `PKT_COMMAND_CPU_READ);
-   wire                decode_read_command  = (command == `PKT_COMMAND_CPU_READ);   
-   wire                decode_write_command = (command == `PKT_COMMAND_CPU_WRITE);   
+   wire                decode_daq_command   = (command == `PKT_COMMAND_DAQ_WRITE) | (command == `PKT_COMMAND_DAQ_READ);
+   wire                decode_read_command  = (command == `PKT_COMMAND_CPU_READ)  | (command == `PKT_COMMAND_DAQ_READ);
+   wire                decode_write_command = (command == `PKT_COMMAND_CPU_WRITE) | (command == `PKT_COMMAND_DAQ_WRITE);
 
    always @(posedge clk)
      begin
@@ -88,6 +104,10 @@ module packet_decode (/*AUTOARG*/
            tx_byte <= 0;
            leds <= 16'b0 ;
 
+           file_num <= 0;
+           file_write_data <= 32'h0;
+           file_write <= 0;
+           file_read <= 0;
         end else begin
            case (state)
              STATE_IDLE: begin
@@ -106,6 +126,10 @@ module packet_decode (/*AUTOARG*/
                    transmit <=0;
                    tx_byte <= 0;
 
+                   file_num <= 0;
+                   file_write_data <= 32'h0;
+                   file_write <= 0;
+                   file_read <= 0;
                    state <= STATE_COMMAND;
                    leds <= 16'b0;
 
@@ -134,13 +158,16 @@ module packet_decode (/*AUTOARG*/
                    state <= STATE_IDLE;
                 end else if (received) begin
                    length <= rx_byte;
-                   byte_count <= 0;
-                   state <= STATE_READ_START_ADDRESS;
+                   if (decode_cpu_command) begin
+                      byte_count <= 0;
+                      state <= STATE_READ_START_ADDRESS;
+                   end else
+                     state <= STATE_DAQ_FILE_NUM;
                 end else begin
                    state <= STATE_LENGTH;
                 end
-             end // case: STATE_LENGTH
-             
+             end
+
              STATE_READ_START_ADDRESS: begin
                 leds[2] <= 1;
                 if (recv_error) begin
@@ -266,6 +293,54 @@ module packet_decode (/*AUTOARG*/
                    end
                 end
              end // case: STATE_CPU_UPLOAD_MEMORY_DONE
+
+             STATE_DAQ_FILE_NUM: begin
+                leds[9] <= 1;
+                if (recv_error) begin
+                   state <= STATE_IDLE;
+                end else if (received) begin
+                   file_num <= rx_byte;
+                   byte_count <= 0;
+                   if (decode_write_command) begin
+                      state <= STATE_DAQ_FILE_WRITE_DATA;
+                   end else begin
+                      state <= STATE_IDLE; //TODO: implement the read path
+                   end
+                end else begin
+                   state <= STATE_DAQ_FILE_NUM;
+                end
+             end
+
+             STATE_DAQ_FILE_WRITE_DATA:begin
+                leds[10] <= 1;
+                if (recv_error) begin
+                   state <= STATE_IDLE;
+                end else if (received) begin
+                   file_write_data[(byte_count*8)+:8] <= rx_byte;
+                   byte_count <= byte_count + 1;
+                   if (byte_count >= 3) begin
+                      byte_count <= 0;
+                      samples_transferred <= 0;
+                      file_write <=1;
+                      state <= STATE_DAQ_FILE_WRITE;
+                   end else begin
+                      state <= STATE_DAQ_FILE_WRITE_DATA;
+                   end
+                end else begin
+                   state <= STATE_DAQ_FILE_WRITE_DATA;
+                end
+             end // case: STATE_DAQ_FILE_WRITE_DATA
+
+
+             STATE_DAQ_FILE_WRITE: begin
+                leds[11] <= 1;
+                if (file_active) begin
+                   file_write <=0;
+                   state <= STATE_IDLE;
+                end else begin
+                   state <= STATE_DAQ_FILE_WRITE;
+                end
+             end
 
              default: begin
                 leds[12] <= 1;

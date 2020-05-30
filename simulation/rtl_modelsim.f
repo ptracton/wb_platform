@@ -7,14 +7,16 @@
       vlog ../rtl/syscon/syscon_regs.v  +incdir+../simulation 
       vlog ../rtl/daq/daq_slave.v
       vlog ../rtl/daq/daq_top.v
-      vlog ../rtl/daq/daq_sm.v
+      vlog ../rtl/daq/daq_sm.v +incdir+../simulation 
       vlog ../rtl/dsp/dsp_slave.v
       vlog ../rtl/dsp/dsp_top.v
       vlog ../rtl/dsp/dsp_sm.v
       vlog ../rtl/dsp/dsp_equations_top.v
       vlog ../rtl/dsp/dsp_equation_sum.v
       vlog ../rtl/dsp/dsp_equation_multiply.v
-      vlog ../rtl/dsp/dsp_equation_dtree.v
+
+      vlog ../rtl/display/display.v
+      vlog ../rtl/display/timer.v
 
       vlog ../rtl/wb_master_interface/arbiter.v
       vlog ../rtl/wb_master_interface/wb_master_interface.v +incdir+../behavioral/wb_common/

@@ -12,6 +12,30 @@ wire [31:0] wb_s2m_cpu_master_dat;
 wire        wb_s2m_cpu_master_ack;
 wire        wb_s2m_cpu_master_err;
 wire        wb_s2m_cpu_master_rty;
+wire [31:0] wb_m2s_daq_master_adr;
+wire [31:0] wb_m2s_daq_master_dat;
+wire  [3:0] wb_m2s_daq_master_sel;
+wire        wb_m2s_daq_master_we;
+wire        wb_m2s_daq_master_cyc;
+wire        wb_m2s_daq_master_stb;
+wire  [2:0] wb_m2s_daq_master_cti;
+wire  [1:0] wb_m2s_daq_master_bte;
+wire [31:0] wb_s2m_daq_master_dat;
+wire        wb_s2m_daq_master_ack;
+wire        wb_s2m_daq_master_err;
+wire        wb_s2m_daq_master_rty;
+wire [31:0] wb_m2s_dsp_master_adr;
+wire [31:0] wb_m2s_dsp_master_dat;
+wire  [3:0] wb_m2s_dsp_master_sel;
+wire        wb_m2s_dsp_master_we;
+wire        wb_m2s_dsp_master_cyc;
+wire        wb_m2s_dsp_master_stb;
+wire  [2:0] wb_m2s_dsp_master_cti;
+wire  [1:0] wb_m2s_dsp_master_bte;
+wire [31:0] wb_s2m_dsp_master_dat;
+wire        wb_s2m_dsp_master_ack;
+wire        wb_s2m_dsp_master_err;
+wire        wb_s2m_dsp_master_rty;
 wire [31:0] wb_m2s_gpio_adr;
 wire [31:0] wb_m2s_gpio_dat;
 wire  [3:0] wb_m2s_gpio_sel;
@@ -36,6 +60,30 @@ wire [31:0] wb_s2m_syscon_dat;
 wire        wb_s2m_syscon_ack;
 wire        wb_s2m_syscon_err;
 wire        wb_s2m_syscon_rty;
+wire [31:0] wb_m2s_dsp_slave_adr;
+wire [31:0] wb_m2s_dsp_slave_dat;
+wire  [3:0] wb_m2s_dsp_slave_sel;
+wire        wb_m2s_dsp_slave_we;
+wire        wb_m2s_dsp_slave_cyc;
+wire        wb_m2s_dsp_slave_stb;
+wire  [2:0] wb_m2s_dsp_slave_cti;
+wire  [1:0] wb_m2s_dsp_slave_bte;
+wire [31:0] wb_s2m_dsp_slave_dat;
+wire        wb_s2m_dsp_slave_ack;
+wire        wb_s2m_dsp_slave_err;
+wire        wb_s2m_dsp_slave_rty;
+wire [31:0] wb_m2s_daq_slave_adr;
+wire [31:0] wb_m2s_daq_slave_dat;
+wire  [3:0] wb_m2s_daq_slave_sel;
+wire        wb_m2s_daq_slave_we;
+wire        wb_m2s_daq_slave_cyc;
+wire        wb_m2s_daq_slave_stb;
+wire  [2:0] wb_m2s_daq_slave_cti;
+wire  [1:0] wb_m2s_daq_slave_bte;
+wire [31:0] wb_s2m_daq_slave_dat;
+wire        wb_s2m_daq_slave_ack;
+wire        wb_s2m_daq_slave_err;
+wire        wb_s2m_daq_slave_rty;
 wire [31:0] wb_m2s_ram0_adr;
 wire [31:0] wb_m2s_ram0_dat;
 wire  [3:0] wb_m2s_ram0_sel;
@@ -100,6 +148,30 @@ wb_intercon wb_intercon0
     .wb_cpu_master_ack_o (wb_s2m_cpu_master_ack),
     .wb_cpu_master_err_o (wb_s2m_cpu_master_err),
     .wb_cpu_master_rty_o (wb_s2m_cpu_master_rty),
+    .wb_daq_master_adr_i (wb_m2s_daq_master_adr),
+    .wb_daq_master_dat_i (wb_m2s_daq_master_dat),
+    .wb_daq_master_sel_i (wb_m2s_daq_master_sel),
+    .wb_daq_master_we_i  (wb_m2s_daq_master_we),
+    .wb_daq_master_cyc_i (wb_m2s_daq_master_cyc),
+    .wb_daq_master_stb_i (wb_m2s_daq_master_stb),
+    .wb_daq_master_cti_i (wb_m2s_daq_master_cti),
+    .wb_daq_master_bte_i (wb_m2s_daq_master_bte),
+    .wb_daq_master_dat_o (wb_s2m_daq_master_dat),
+    .wb_daq_master_ack_o (wb_s2m_daq_master_ack),
+    .wb_daq_master_err_o (wb_s2m_daq_master_err),
+    .wb_daq_master_rty_o (wb_s2m_daq_master_rty),
+    .wb_dsp_master_adr_i (wb_m2s_dsp_master_adr),
+    .wb_dsp_master_dat_i (wb_m2s_dsp_master_dat),
+    .wb_dsp_master_sel_i (wb_m2s_dsp_master_sel),
+    .wb_dsp_master_we_i  (wb_m2s_dsp_master_we),
+    .wb_dsp_master_cyc_i (wb_m2s_dsp_master_cyc),
+    .wb_dsp_master_stb_i (wb_m2s_dsp_master_stb),
+    .wb_dsp_master_cti_i (wb_m2s_dsp_master_cti),
+    .wb_dsp_master_bte_i (wb_m2s_dsp_master_bte),
+    .wb_dsp_master_dat_o (wb_s2m_dsp_master_dat),
+    .wb_dsp_master_ack_o (wb_s2m_dsp_master_ack),
+    .wb_dsp_master_err_o (wb_s2m_dsp_master_err),
+    .wb_dsp_master_rty_o (wb_s2m_dsp_master_rty),
     .wb_gpio_adr_o       (wb_m2s_gpio_adr),
     .wb_gpio_dat_o       (wb_m2s_gpio_dat),
     .wb_gpio_sel_o       (wb_m2s_gpio_sel),
@@ -124,6 +196,30 @@ wb_intercon wb_intercon0
     .wb_syscon_ack_i     (wb_s2m_syscon_ack),
     .wb_syscon_err_i     (wb_s2m_syscon_err),
     .wb_syscon_rty_i     (wb_s2m_syscon_rty),
+    .wb_dsp_slave_adr_o  (wb_m2s_dsp_slave_adr),
+    .wb_dsp_slave_dat_o  (wb_m2s_dsp_slave_dat),
+    .wb_dsp_slave_sel_o  (wb_m2s_dsp_slave_sel),
+    .wb_dsp_slave_we_o   (wb_m2s_dsp_slave_we),
+    .wb_dsp_slave_cyc_o  (wb_m2s_dsp_slave_cyc),
+    .wb_dsp_slave_stb_o  (wb_m2s_dsp_slave_stb),
+    .wb_dsp_slave_cti_o  (wb_m2s_dsp_slave_cti),
+    .wb_dsp_slave_bte_o  (wb_m2s_dsp_slave_bte),
+    .wb_dsp_slave_dat_i  (wb_s2m_dsp_slave_dat),
+    .wb_dsp_slave_ack_i  (wb_s2m_dsp_slave_ack),
+    .wb_dsp_slave_err_i  (wb_s2m_dsp_slave_err),
+    .wb_dsp_slave_rty_i  (wb_s2m_dsp_slave_rty),
+    .wb_daq_slave_adr_o  (wb_m2s_daq_slave_adr),
+    .wb_daq_slave_dat_o  (wb_m2s_daq_slave_dat),
+    .wb_daq_slave_sel_o  (wb_m2s_daq_slave_sel),
+    .wb_daq_slave_we_o   (wb_m2s_daq_slave_we),
+    .wb_daq_slave_cyc_o  (wb_m2s_daq_slave_cyc),
+    .wb_daq_slave_stb_o  (wb_m2s_daq_slave_stb),
+    .wb_daq_slave_cti_o  (wb_m2s_daq_slave_cti),
+    .wb_daq_slave_bte_o  (wb_m2s_daq_slave_bte),
+    .wb_daq_slave_dat_i  (wb_s2m_daq_slave_dat),
+    .wb_daq_slave_ack_i  (wb_s2m_daq_slave_ack),
+    .wb_daq_slave_err_i  (wb_s2m_daq_slave_err),
+    .wb_daq_slave_rty_i  (wb_s2m_daq_slave_rty),
     .wb_ram0_adr_o       (wb_m2s_ram0_adr),
     .wb_ram0_dat_o       (wb_m2s_ram0_dat),
     .wb_ram0_sel_o       (wb_m2s_ram0_sel),

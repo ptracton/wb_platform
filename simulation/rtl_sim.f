@@ -1,7 +1,4 @@
-      +incdir+../testbench
-      +incdir+../simulation
-      +incdir+../rtl
-      +incdir+../behavioral/wb_intercon
+     +incdir+../testbench
       +incdir+../behavioral/
       +incdir+../behavioral/wb_common/
       +incdir+../rtl/bus_matrix/
@@ -10,13 +7,28 @@
       +incdir+../rtl/gpio
       +define+VERBOSE
       +define+SIM
-
+      +define+RTL
+      
       ../rtl/top.v
       ../rtl/cpu/cpu_top.v
       ../rtl/syscon/syscon.v
       ../rtl/syscon/syscon_regs.v
       ../rtl/syscon/syscon_top.v
+      ../rtl/daq/daq_slave.v
+      ../rtl/daq/daq_top.v
+      ../rtl/daq/daq_sm.v
+      ../rtl/dsp/dsp_slave.v
+      ../rtl/dsp/dsp_top.v
+      ../rtl/dsp/dsp_sm.v
+      ../rtl/dsp/dsp_equations_top.v
+      ../rtl/dsp/dsp_equation_sum.v
+      ../rtl/dsp/dsp_equation_multiply.v
+      ../rtl/dsp/dsp_equation_dtree.v
+      ../rtl/dsp/priority_encoder.v
 
+      ../rtl/display/display.v
+      ../rtl/display/timer.v
+      
       ../rtl/wb_master_interface/arbiter.v
       ../rtl/wb_master_interface/wb_master_interface.v
       ../rtl/bus_matrix/bus_matrix.v
@@ -47,9 +59,14 @@
       ../behavioral/wb_uart/uart_transmitter.v
       ../behavioral/wb_uart/uart_wb.v
 
+      //      ../behavioral/wb_common/wb_common.v
+      //      ../behavioral/wb_common/wb_common_params.v
+
       ../testbench/testbench.v
       ../testbench/test_tasks.v
-      ../testbench/platform_tasks.v
+      ../testbench/dsp_tasks.v
       ../testbench/uart_tasks.v
       ../testbench/dump.v
-
+      ../testbench/data_file_manager.v
+      ../testbench/data_file_monitor.v
+      ../testbench/daq_injector.v

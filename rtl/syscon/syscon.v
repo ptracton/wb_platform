@@ -57,14 +57,7 @@ module syscon (/*AUTOARG*/
 `else
    wire   clk_10MHZ;
 
-   reg foo;
-      initial begin
-      foo <= 1;
-      forever begin
-         #(178/2) foo <= ~foo;
-      end
-   end
-   
+
    // Put technology specific clocking here, things like Xilinx DCM, etc...
    clk_wiz_0 clk_wiz(
                      .wb_clk(wb_clk_o),

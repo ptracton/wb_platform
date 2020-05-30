@@ -46,11 +46,17 @@ module testbench (/*AUTOARG*/ ) ;
 
    wire        tx;
    wire        rx;
-
+   wire [7:0]  test_bus;
+   wire [3:0]  anode;
+   wire [7:0]  cathode;
+   
    top dut(
            // Outputs
            .leds(leds),
            .tx(tx),
+           .test_bus(test_bus),
+           .anode(anode),
+           .cathode(cathode),
 
            // Inputs
            .clk_pad_i(wb_clk),
@@ -184,9 +190,9 @@ module testbench (/*AUTOARG*/ ) ;
    end
 
    //
-   // Platform Support Tasks
+   // DSP Support Tasks
    //
-   platform_tasks platform_tasks();
+   dsp_tasks dsp_tasks();
 
 
    //
@@ -198,5 +204,16 @@ module testbench (/*AUTOARG*/ ) ;
    // The actual test cases that are being tested
    //
    test_case test_case();
-
+   
+   initial begin
+      if ($test$plusargs("slow")) begin
+         $sdf_annotate("../backend/basys3/implementation/top_timesim.sdf", testbench.dut, "", "sdf_slow.log", "MAXIMUM");
+         $display (" SLOW DELAY SIMULATION: MAXIMUM SDF DATA BEING USED");
+      end else if ($test$plusargs("fast")) begin
+         $sdf_annotate("../backend/basys3/implementation/top_timesim.sdf", testbench.dut, "", "sdf_fast.log", "MINIMUM");
+         $display (" FAST DELAY SIMULATION: MAXIMUM SDF DATA BEING USED");         
+      end else begin
+         $display (" NO SDF DATA USED");         
+      end
+   end
 endmodule // testbench

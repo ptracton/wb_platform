@@ -42,7 +42,12 @@ module syscon_regs (/*AUTOARG*/
    input             locked;
 
    wire [31:0]       identification;
+   `ifdef SPARTAN7
+   assign identification[`F_IDENTIFICATION_PLATFORM]  = 8'hB; //`B_IDENTIFICATION_FPGA;
+   `else
    assign identification[`F_IDENTIFICATION_PLATFORM]  = 8'hA; //`B_IDENTIFICATION_FPGA;
+   `endif
+   
    assign identification[`F_IDENTIFICATION_RESERVED]  = 0;
    assign identification[`F_IDENTIFICATION_MINOR_REV] = 8'hB; //`B_IDENTIFICATION_MINOR_REV;
    assign identification[`F_IDENTIFICATION_MAJOR_REV] = 8'hC; //`B_IDENTIFICATION_MAJOR_REV;

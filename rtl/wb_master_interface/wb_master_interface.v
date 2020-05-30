@@ -66,69 +66,69 @@ module wb_master_interface (/*AUTOARG*/
 
    always @(posedge wb_clk)
      if (wb_rst) begin
-        state = STATE_IDLE;
-        wb_adr_o = `WB_RAM0;
-        wb_dat_o = 0;
-        wb_sel_o = 0;
-        wb_we_o  = 0;
-        wb_cyc_o = 0;
-        wb_stb_o = 0;
-        wb_cti_o = 1;
-        wb_bte_o = 0;
-        data_rd  = 0;
+        state <= STATE_IDLE;
+        wb_adr_o <= `WB_RAM0;
+        wb_dat_o <= 0;
+        wb_sel_o <= 0;
+        wb_we_o  <= 0;
+        wb_cyc_o <= 0;
+        wb_stb_o <= 0;
+        wb_cti_o <= 1;
+        wb_bte_o <= 0;
+        data_rd  <= 0;
 
      end else begin // if (wb_rst)
         case (state)
           STATE_IDLE: begin
-             wb_adr_o = `WB_RAM0;
-             wb_dat_o = 0;
-             wb_sel_o = 0;
-             wb_we_o  = 0;
-             wb_cyc_o = 0;
-             wb_stb_o = 0;
-             wb_cti_o = 1;
-             wb_bte_o = 0;
+             wb_adr_o <= `WB_RAM0;
+             wb_dat_o <= 0;
+             wb_sel_o <= 0;
+             wb_we_o  <= 0;
+             wb_cyc_o <= 0;
+             wb_stb_o <= 0;
+             wb_cti_o <= 1;
+             wb_bte_o <= 0;
              if (start) begin
-                state = STATE_WAIT_ACK;
-                wb_adr_o = address;
-                wb_dat_o = data_wr;
-                wb_sel_o = selection;
-                wb_we_o  = write;
-                wb_cyc_o = 1;
-                wb_stb_o = 1;
-                wb_cti_o = 1;
-                wb_bte_o = 0;
-                data_rd  =0;
+                state <= STATE_WAIT_ACK;
+                wb_adr_o <= address;
+                wb_dat_o <= data_wr;
+                wb_sel_o <= selection;
+                wb_we_o  <= write;
+                wb_cyc_o <= 1;
+                wb_stb_o <= 1;
+                wb_cti_o <= 1;
+                wb_bte_o <= 0;
+                data_rd  <=0;
 
              end else begin
-                state = STATE_IDLE;
+                state <= STATE_IDLE;
              end
           end // case: STATE_IDLE
           STATE_WAIT_ACK: begin
-             wb_cyc_o = 1;
-             wb_stb_o = 1;
-             wb_cti_o = 1;
-             wb_bte_o = 0;
+             wb_cyc_o <= 1;
+             wb_stb_o <= 1;
+             wb_cti_o <= 1;
+             wb_bte_o <= 0;
 
              if (wb_err_i || wb_rty_i) begin
-                state = STATE_ERROR;
+                state <= STATE_ERROR;
              end else if (wb_ack_i) begin
 		        if (!write) begin
-		           data_rd = wb_dat_i;
+		           data_rd <= wb_dat_i;
 		        end
-                state = STATE_IDLE;
-                wb_stb_o = 0;
-                wb_cyc_o = 0;
+                state <= STATE_IDLE;
+                wb_stb_o <= 0;
+                wb_cyc_o <= 0;
              end else begin
-                state = STATE_WAIT_ACK;
+                state <= STATE_WAIT_ACK;
              end
 
           end // case: STATE_WAIT_ACK
           STATE_ERROR: begin
-             state = STATE_IDLE;
+             state <= STATE_IDLE;
           end
           default: begin
-             state = STATE_IDLE;
+             state <= STATE_IDLE;
           end
 
         endcase // case (state)

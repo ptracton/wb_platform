@@ -11,9 +11,10 @@
 module pc_interface (/*AUTOARG*/
    // Outputs
    tx, leds, cpu_address, cpu_start, cpu_selection, cpu_write,
-   cpu_data_wr,
+   cpu_data_wr, file_num, file_write, file_read, file_write_data,
    // Inputs
-   wb_clk, wb_rst, rx, cpu_data_rd, cpu_active
+   wb_clk, wb_rst, rx, cpu_data_rd, cpu_active, file_read_data,
+   file_active
    ) ;
 
    parameter dw = 32;
@@ -36,6 +37,13 @@ module pc_interface (/*AUTOARG*/
    input [dw-1:0] cpu_data_rd;
    input          cpu_active;
 
+   output wire [7:0] file_num;
+   output wire       file_write;
+   output wire       file_read;
+   output wire [31:0] file_write_data;
+   input [31:0]      file_read_data;
+   input             file_active;
+
    //
    // UART Instance
    //
@@ -48,8 +56,17 @@ module pc_interface (/*AUTOARG*/
    wire       is_transmitting;
    wire       recv_error;
 
+`ifdef SPARTAN7
+   // The ARTY S7-50 board can't go down to 5.8 MHz, so it runs
+   // at 11.6 MHz.  Since it runs twice as fast, count twice as
+   // far to keep the baud rate correct.
+   parameter UART_CLOCK_DIVIDE = 24;
+`else
+   parameter UART_CLOCK_DIVIDE = 12;
 
-   uart #(.CLOCK_DIVIDE(12))
+`endif
+
+   uart #(.CLOCK_DIVIDE(UART_CLOCK_DIVIDE))
    uart0(
 	     .clk(wb_clk), // The master clock for this module
 	     .rst(wb_rst), // Synchronous reset.
@@ -86,7 +103,15 @@ module pc_interface (/*AUTOARG*/
                         .cpu_address(cpu_address),
                         .cpu_selection(cpu_selection),
                         .cpu_write(cpu_write),
-                        .cpu_data_wr(cpu_data_wr)
+                        .cpu_data_wr(cpu_data_wr),
+
+                        // DAQ File Interface
+                        .file_num(file_num),
+                        .file_write(file_write),
+                        .file_read(file_read),
+                        .file_write_data(file_write_data),
+                        .file_read_data(file_read_data),
+                        .file_active(file_active)
                         ) ;
 
 
